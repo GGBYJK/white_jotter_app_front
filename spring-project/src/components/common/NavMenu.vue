@@ -11,14 +11,19 @@
       {{ item.navItem }}
     </el-menu-item>
     <a href="#nowhere" style="color: #222;float: right;padding: 20px;">更多功能</a>
-    <i class="el-icon-menu" style="float:right;font-size: 45px;color: #222;padding-top: 8px"></i>
+    <el-icon style="float:right;font-size: 45px;color: #222;padding-top: 8px"><Menu /></el-icon>
     <span style="position: absolute;padding-top: 20px;right: 43%;font-size: 20px;font-weight: bold">White Jotter - Your Mind Palace</span>
+    <el-icon style="float:right;font-size: 45px;color: #222;padding-top: 8px"><SwitchButton /></el-icon>
   </el-menu>
 </template>
 
 <script>
+import {Menu, SwitchButton} from "@element-plus/icons";
 export default {
   name: 'NavMenu',
+  components: {
+    Menu,SwitchButton
+  },
   data () {
     return {
       navList: [
@@ -27,6 +32,18 @@ export default {
         {name: '/library', navItem: '图书馆'},
         {name: '/admin', navItem: '个人中心'}
       ]
+    }
+  },
+  methods: {
+    logout () {
+      var _this = this
+      this.$axios.get('/logout').then(resp => {
+        if (resp.data.code === 200) {
+          // 前后端状态保持一致
+          _this.$store.commit('logout')
+          _this.$router.replace('/login')
+        }
+      })
     }
   }
 }
@@ -39,6 +56,10 @@ a{
 
 span {
   pointer-events: none;
+}
+.el-icon-switch-button {
+  cursor: pointer;
+  outline:0;
 }
 </style>
 

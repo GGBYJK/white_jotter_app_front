@@ -8,8 +8,10 @@ import {store} from "@/store";
 
 router.beforeEach((to, from, next) => {
         if (to.meta.requireAuth) {
-            if (store.state.user.username) {
-                next()
+            if (store.state.user) {
+                axios.get('/authentication').then(resp => {
+                    if (resp) next()
+                })
             } else {
                 next({
                     path: 'login',
@@ -20,8 +22,8 @@ router.beforeEach((to, from, next) => {
             next()
         }
     }
-);
-
+)
+axios.defaults.withCredentials = true
 axios.defaults.baseURL = 'http://localhost:8080/api'
 const app = createApp(App);
 app.config.productionTip = false;
